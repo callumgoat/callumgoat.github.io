@@ -1,0 +1,5 @@
+project_name = "callumgoat-github-io"
+
+[build]
+command = ""
+upload = "./"
