@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Moving Images</title>
+<title>Moving Images Fixed</title>
 
 <style>
     body {
@@ -13,36 +13,36 @@
 
     .img {
         position: absolute;
-        width: 400px; /* oversized */
+        width: 300px; /* slightly smaller = more reliable */
         pointer-events: none;
     }
 </style>
-
 </head>
+
 <body>
 
 <script>
 const imageSources = ["IMG_1.jpg", "IMG_2.jpg", "IMG_3.jpg"];
 const images = [];
-const totalImages = 12; // 3 images × 4 repeats
+const totalImages = 12;
+const size = 300;
 
 function createImages() {
     for (let i = 0; i < totalImages; i++) {
         const img = document.createElement("img");
         img.src = imageSources[i % imageSources.length];
         img.className = "img";
-
         document.body.appendChild(img);
 
-        const size = 400;
+        let x, y, placed = false;
+        let attempts = 0;
 
-        let x, y, overlapping;
-
-        // Prevent overlap on spawn
-        do {
-            overlapping = false;
+        // Try up to 100 times to find non-overlapping spot
+        while (!placed && attempts < 100) {
             x = Math.random() * (window.innerWidth - size);
             y = Math.random() * (window.innerHeight - size);
+
+            let overlapping = false;
 
             for (let other of images) {
                 if (Math.abs(x - other.x) < size &&
@@ -51,12 +51,21 @@ function createImages() {
                     break;
                 }
             }
-        } while (overlapping);
+
+            if (!overlapping) placed = true;
+            attempts++;
+        }
+
+        // If no perfect spot found, just place it anyway
+        if (!placed) {
+            x = Math.random() * (window.innerWidth - size);
+            y = Math.random() * (window.innerHeight - size);
+        }
 
         const dx = (Math.random() * 2 + 1) * (Math.random() < 0.5 ? -1 : 1);
         const dy = (Math.random() * 2 + 1) * (Math.random() < 0.5 ? -1 : 1);
 
-        const obj = { el: img, x, y, dx, dy, size };
+        const obj = { el: img, x, y, dx, dy };
         images.push(obj);
 
         img.style.left = x + "px";
@@ -69,12 +78,11 @@ function update() {
         img.x += img.dx;
         img.y += img.dy;
 
-        // Bounce off walls
-        if (img.x <= 0 || img.x + img.size >= window.innerWidth) {
+        if (img.x <= 0 || img.x + size >= window.innerWidth) {
             img.dx *= -1;
         }
 
-        if (img.y <= 0 || img.y + img.size >= window.innerHeight) {
+        if (img.y <= 0 || img.y + size >= window.innerHeight) {
             img.dy *= -1;
         }
 
