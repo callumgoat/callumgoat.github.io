@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>callumgoat.github.io</title>
+  <title>jadenleo.me</title>
   <style>
     html, body {
       margin: 0;
@@ -11,7 +11,7 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background-color: #000;
+      background-color: #ffffff;
     }
     .container {
       position: relative;
@@ -29,6 +29,60 @@
       object-fit: cover;
       display: block;
     }
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Positions</title>
+    <style>
+        body {
+            height: 200vh;
+            margin: 0;
+            position: relative;
+        }
+
+        img {
+            width: 150px;
+            position: absolute;
+        }
+
+        .top-left {
+            top: 10px;
+            left: 10px;
+        }
+
+        .top-right {
+            top: 10px;
+            right: 10px;
+        }
+
+        .center {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .bottom-left {
+            bottom: 10px;
+            left: 10px;
+        }
+
+        .bottom-right {
+            bottom: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <img src="IMG_5878.jpg" class="top-left" alt="Image">
+    <img src="IMG_5878.jpg" class="top-right" alt="Image">
+    <img src="IMG_5878.jpg" class="center" alt="Image">
+    <img src="IMG_5878.jpg" class="bottom-left" alt="Image">
+    <img src="IMG_5878.jpg" class="bottom-right" alt="Image">
+
+</body>
+</html>
   </style>
 </head>
 <body>
