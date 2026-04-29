@@ -1,89 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>jadenleo.me</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 500%;
-      height: 500%;
-      overflow: hidden;
-      background-color: #ffffff;
+<meta charset="UTF-8">
+<title>Moving Images</title>
+
+<style>
+    body {
+        margin: 0;
+        overflow: hidden;
+        background: #111;
     }
-    .container {
-      position: relative;
-      width: 500%;
-      height: 500%;
-      overflow: hidden;
+
+    .img {
+        position: absolute;
+        width: 400px; /* oversized */
+        pointer-events: none;
     }
-    .floating-image {
-      position: absolute;
-      opacity: 0.8;
-    }
-    .floating-image img {
-      width: 500%;
-      height: 500%;
-      object-fit: cover;
-      display: block;
-    }
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Image Positions</title>
-    <style>
-        body {
-            height: 200vh;
-            margin: 0;
-            position: relative;
-        }
+</style>
 
-        img {
-            width: 150px;
-            position: absolute;
-        }
-
-        .top-left {
-            top: 100px;
-            left: 100px;
-        }
-
-        .top-right {
-            top: 100px;
-            right: 100px;
-        }
-
-        .center {
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .bottom-left {
-            bottom: 100px;
-            left: 100px;
-        }
-
-        .bottom-right {
-            bottom: 100px;
-            right: 100px;
-        }
-    </style>
 </head>
 <body>
 
-    <img src="IMG_5878.jpeg" class="top-left" alt="Image">
-    <img src="IMG_5878.jpeg" class="top-right" alt="Image">
-    <img src="IMG_5878.jpeg" class="center" alt="Image">
-    <img src="IMG_5878.jpg" class="bottom-left" alt="Image">
-    <img src="IMG_5878.jpeg" class="bottom-right" alt="Image">
+<script>
+const imageSources = ["IMG_1.jpg", "IMG_2.jpg", "IMG_3.jpg"];
+const images = [];
+const totalImages = 12; // 3 images × 4 repeats
+
+function createImages() {
+    for (let i = 0; i < totalImages; i++) {
+        const img = document.createElement("img");
+        img.src = imageSources[i % imageSources.length];
+        img.className = "img";
+
+        document.body.appendChild(img);
+
+        const size = 400;
+
+        let x, y, overlapping;
+
+        // Prevent overlap on spawn
+        do {
+            overlapping = false;
+            x = Math.random() * (window.innerWidth - size);
+            y = Math.random() * (window.innerHeight - size);
+
+            for (let other of images) {
+                if (Math.abs(x - other.x) < size &&
+                    Math.abs(y - other.y) < size) {
+                    overlapping = true;
+                    break;
+                }
+            }
+        } while (overlapping);
+
+        const dx = (Math.random() * 2 + 1) * (Math.random() < 0.5 ? -1 : 1);
+        const dy = (Math.random() * 2 + 1) * (Math.random() < 0.5 ? -1 : 1);
+
+        const obj = { el: img, x, y, dx, dy, size };
+        images.push(obj);
+
+        img.style.left = x + "px";
+        img.style.top = y + "px";
+    }
+}
+
+function update() {
+    for (let img of images) {
+        img.x += img.dx;
+        img.y += img.dy;
+
+        // Bounce off walls
+        if (img.x <= 0 || img.x + img.size >= window.innerWidth) {
+            img.dx *= -1;
+        }
+
+        if (img.y <= 0 || img.y + img.size >= window.innerHeight) {
+            img.dy *= -1;
+        }
+
+        img.el.style.left = img.x + "px";
+        img.el.style.top = img.y + "px";
+    }
+
+    requestAnimationFrame(update);
+}
+
+createImages();
+update();
+</script>
 
 </body>
-</html>
-  </style>
-</head>
-<body>
 </html>
